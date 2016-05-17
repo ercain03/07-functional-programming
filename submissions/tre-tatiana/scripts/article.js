@@ -1,4 +1,4 @@
-// TODO: Wrap the entire contents of this file in an IIFE.
+// DONE: Wrap the entire contents of this file in an IIFE.
 // Pass in to the IIFE a module, upon which objects can be attached for later access.function
 (function(module){
   function Article (opts) {
@@ -39,7 +39,7 @@
   // This function will retrieve the data from either a local or remote source,
   // and process it, then hand off control to the View.
 
-  /* TODO: Refactoring the Article.fetchAll method, it now accepts a parameter
+  /* DONE: Refactoring the Article.fetchAll method, it now accepts a parameter
       called 'next' ('next' is just a placeholder, but when referenced at
       the time fetchAll is called it will be a 'view' function) that will
       execute once the loading of articles is done. We do this because
@@ -55,16 +55,16 @@
           var eTag = xhr.getResponseHeader('eTag');
           if (!localStorage.eTag || eTag !== localStorage.eTag) {
             localStorage.eTag = eTag;
-            Article.getAll(next); //TODO: pass 'next' into getAll();
+            Article.getAll(next); //DONE: pass 'next' into getAll();
           } else {
             Article.loadAll(JSON.parse(localStorage.hackerIpsum));
-            // TODO: Replace the following line with 'next' and call next instead.
+            // DONE: Replace the following line with 'next' and call next instead.
             next();
           }
         }
       });
     } else {
-      Article.getAll(next); // TODO: pass 'next' into getAll();
+      Article.getAll(next); // DONE: pass 'next' into getAll();
     }
   };
 
@@ -72,12 +72,12 @@
     $.getJSON('data/hackerIpsum.json', function(responseData) {
       Article.loadAll(responseData);
       localStorage.hackerIpsum = JSON.stringify(responseData);
-      // TODO: call next!
+      // DONE: call next!
       next();
     });
   };
 
-  /* TODO: Chain together a `map` and a `reduce` call to get a rough count of
+  /* DONE: Chain together a `map` and a `reduce` call to get a rough count of
       all words in all articles. */
   Article.numWordsAll = function() {
     return Article.all.map(function(article) {
@@ -85,16 +85,16 @@
       return article.body.match(/\b\w+/g).length;
     })
     .reduce(function(a, b) {
-      // return (TODO: Sum up all the values!)
+      // return (DONE: Sum up all the values!)
       return a + b;
     });
   };
 
-  /* TODO: Chain together a `map` and a `reduce` call to
+  /* DONE: Chain together a `map` and a `reduce` call to
             produce an array of *unique* author names. */
 
   Article.allAuthors = function() {
-    //return       TODO: map our collection
+    //return       DONE: map our collection
     return Article.all.map(function(article){
       return article.author;
     }).reduce(function(authorNames, name) {
@@ -103,26 +103,32 @@
       };
       return authorNames;
     }, []);
-      //return    TODO: return just the author names
-    /* TODO: For our `reduce` that we'll chain here -- since we are trying to
+      //return    DONE: return just the author names
+    /* DONE: For our `reduce` that we'll chain here -- since we are trying to
         return an array, we'll need to specify an accumulator type...
         What data type should this accumulator be and where is it placed? */
-
-
   };
 
   Article.numWordsByAuthor = function() {
-    /* TODO: Transform each author element into an object with 2 properties:
+    /* DONE: Transform each author element into an object with 2 properties:
         One for the author's name, and one for the total number of words across
         the matching articles written by the specified author. */
+
     return Article.allAuthors().map(function(a) { // 'a' is a reference to an individual author.
       return {
-        // name:
-        // numWords: someCollection.filter(function(curArticle) {
-        //  what do we return here to check for matching authors?
-        // })
-        // .map(...) // use .map to return the author's word count for each article's body (hint: regexp!).
+        name: a,
+        numWords: Article.all.filter(function(curArticle) {
+          return curArticle.author === a;
+         //what do we return here to check for matching authors?
+        })
+        .map(function(article) {
+          return article.body.match(/\b\w+/g).length;
+        })
+        // use .map to return the author's word count for each article's body (hint: regexp!).
         // .reduce(...) // squash this array of numbers into one big number!
+        .reduce(function(a, b) {
+          return a + b;
+        })
       };
     });
   };
