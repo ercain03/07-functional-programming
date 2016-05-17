@@ -1,6 +1,6 @@
 // TODO: Wrap the entire contents of this file in an IIFE.
 // Pass in to the IIFE a module, upon which objects can be attached for later access.function
-(function(window){
+(function(module){
   function Article (opts) {
     for (key in opts) {
       this[key] = opts[key];
@@ -50,7 +50,7 @@
     if (localStorage.hackerIpsum) {
       $.ajax({
         type: 'HEAD',
-        url: '/data/hackerIpsum.json',
+        url: 'data/hackerIpsum.json',
         success: function(data, message, xhr) {
           var eTag = xhr.getResponseHeader('eTag');
           if (!localStorage.eTag || eTag !== localStorage.eTag) {
@@ -69,7 +69,7 @@
   };
 
   Article.getAll = function(next) {
-    $.getJSON('/data/hackerIpsum.json', function(responseData) {
+    $.getJSON('data/hackerIpsum.json', function(responseData) {
       Article.loadAll(responseData);
       localStorage.hackerIpsum = JSON.stringify(responseData);
       // TODO: call next!
@@ -92,13 +92,23 @@
 
   /* TODO: Chain together a `map` and a `reduce` call to
             produce an array of *unique* author names. */
+
   Article.allAuthors = function() {
     //return       TODO: map our collection
+    return Article.all.map(function(article){
+      return article.author;
+    }).reduce(function(authorNames, name) {
+      if(authorNames.indexOf(name) === -1) {
+        authorNames.push(name);
+      };
+      return authorNames;
+    }, []);
       //return    TODO: return just the author names
-
     /* TODO: For our `reduce` that we'll chain here -- since we are trying to
         return an array, we'll need to specify an accumulator type...
         What data type should this accumulator be and where is it placed? */
+
+
   };
 
   Article.numWordsByAuthor = function() {
@@ -116,4 +126,5 @@
       };
     });
   };
+  module.Article = Article;
 })(window);

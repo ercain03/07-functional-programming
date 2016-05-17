@@ -85,15 +85,16 @@
       &copy; 2016 Code Fellows | Static Blog | Happy Ipsum!
     </footer>
 
-    <script src="/vendor/scripts/jquery-2.1.4.js"></script>
-    <script src="/vendor/scripts/handlebars.js"></script>
-    <script src="/vendor/scripts/marked.js"></script>
-    <script src="/scripts/article.js"></script>
-    <script src="/scripts/articleView.js"></script>
+    <script src="vendor/scripts/jquery-2.1.4.js"></script>
+    <script src="vendor/scripts/handlebars.js"></script>
+    <script src="vendor/scripts/marked.js"></script>
+    <script src="scripts/article.js"></script>
+    <script src="scripts/articleView.js"></script>
     <script>
       /* TODO: The Article.fetchAll() method call now requires a callback.
           What 'view' method do we want to run on this index.html page? */
       // Article.fetchAll(); // Pass in the correct view method here.
+      Article.fetchAll(articleView.initIndexPage);
     </script>
   </body>
 </html>
